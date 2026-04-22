@@ -3,17 +3,15 @@ package com.example.demo.repository;
 import com.example.demo.model.Book;
 import jakarta.persistence.EntityManager;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
+@RequiredArgsConstructor
 public class BookRepositoryImpl implements BookRepository {
-    private EntityManager entityManager;
-
-    public BookRepositoryImpl(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
+    private final EntityManager entityManager;
 
     @Override
     public Book save(Book book) {
