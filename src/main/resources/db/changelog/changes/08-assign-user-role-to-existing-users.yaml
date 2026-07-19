@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: 08-assign-user-role-to-existing-users
+      author: MishaLehotskyi
+      changes:
+        - sql:
+            comment: Assign USER role to every user that does not yet have any role
+            sql: >
+              INSERT INTO users_roles (user_id, role_id)
+              SELECT u.id, (SELECT id FROM roles WHERE name = 'USER')
+              FROM users u
+              WHERE u.id NOT IN (SELECT user_id FROM users_roles)

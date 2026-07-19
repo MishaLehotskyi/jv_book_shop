@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 07-assign-admin-role
+      author: MishaLehotskyi
+      changes:
+        - insert:
+            tableName: users_roles
+            columns:
+              - column:
+                  name: user_id
+                  valueComputed: (SELECT id FROM users WHERE email = 'admin@bookshop.com')
+              - column:
+                  name: role_id
+                  valueComputed: (SELECT id FROM roles WHERE name = 'ADMIN')

@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: 06-insert-admin-user
+      author: MishaLehotskyi
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: admin@bookshop.com
+              - column:
+                  name: password
+                  value: $2a$10$SFrJqgL/TkTY2SJsKLmqge7hvxgqD8tMTkHROHebE7DvqOEtQwk7W
+              - column:
+                  name: first_name
+                  value: Admin
+              - column:
+                  name: last_name
+                  value: Adminovich
+              - column:
+                  name: shipping_address
+                  value: Admin street 1
+              - column:
+                  name: is_deleted
+                  valueBoolean: false
