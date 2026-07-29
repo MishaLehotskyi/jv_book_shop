@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.BookDto;
+import com.example.demo.dto.BookDtoWithoutCategoryIds;
 import com.example.demo.dto.BookSearchParametersDto;
 import com.example.demo.dto.CreateBookRequestDto;
 import com.example.demo.dto.UpdateBookRequestDto;
@@ -20,4 +21,6 @@ public interface BookService {
     void deleteById(Long id);
 
     List<BookDto> search(BookSearchParametersDto searchParameters);
+
+    Page<BookDtoWithoutCategoryIds> findAllByCategoryId(Long categoryId, Pageable pageable);
 }

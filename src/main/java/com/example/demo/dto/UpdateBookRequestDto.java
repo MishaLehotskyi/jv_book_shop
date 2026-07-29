@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.util.List;
 
 public record UpdateBookRequestDto(
         @NotBlank(message = "Title must not be blank")
@@ -37,6 +38,8 @@ public record UpdateBookRequestDto(
         String description,
 
         @Size(max = 512, message = "Cover image URL must be at most 512 characters")
-        String coverImage
+        String coverImage,
+
+        List<@NotNull(message = "Category id must not be null") Long> categoryIds
 ) {
 }
