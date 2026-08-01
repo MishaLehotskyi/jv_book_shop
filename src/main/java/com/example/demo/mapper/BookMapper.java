@@ -18,7 +18,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring")
 public interface BookMapper {
-    @Mapping(target = "categoryIds", ignore = true)
+    @Mapping(target = "categoryIds", source = "categories")
     BookDto toDto(Book book);
 
     BookDtoWithoutCategoryIds toDtoWithoutCategories(Book book);
@@ -30,14 +30,13 @@ public interface BookMapper {
     @Mapping(target = "categories", ignore = true)
     void updateBookFromDto(UpdateBookRequestDto dto, @MappingTarget Book book);
 
-    @AfterMapping
-    default void setCategoryIds(@MappingTarget BookDto bookDto, Book book) {
-        Set<Category> categories = book.getCategories();
-        if (categories != null) {
-            bookDto.setCategoryIds(categories.stream()
-                    .map(Category::getId)
-                    .collect(Collectors.toSet()));
+    default Set<Long> toCategoryIds(Set<Category> categories) {
+        if (categories == null) {
+            return Set.of();
         }
+        return categories.stream()
+                .map(Category::getId)
+                .collect(Collectors.toSet());
     }
 
     @AfterMapping

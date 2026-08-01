@@ -1,6 +1,7 @@
 package com.example.demo.mapper;
 
 import com.example.demo.dto.CategoryDto;
+import com.example.demo.dto.CreateCategoryDto;
 import com.example.demo.model.Category;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -11,8 +12,8 @@ public interface CategoryMapper {
     CategoryDto toDto(Category category);
 
     @Mapping(target = "id", ignore = true)
-    Category toEntity(CategoryDto categoryDto);
+    Category toEntity(CreateCategoryDto categoryDto);
 
     @Mapping(target = "id", ignore = true)
-    void updateCategoryFromDto(CategoryDto categoryDto, @MappingTarget Category category);
+    void updateCategoryFromDto(CreateCategoryDto categoryDto, @MappingTarget Category category);
 }

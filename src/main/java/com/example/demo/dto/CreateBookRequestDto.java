@@ -3,8 +3,10 @@ package com.example.demo.dto;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.List;
@@ -40,6 +42,7 @@ public record CreateBookRequestDto(
         @Size(max = 512, message = "Cover image URL must be at most 512 characters")
         String coverImage,
 
-        List<@NotNull(message = "Category id must not be null") Long> categoryIds
+        @NotEmpty(message = "Category ids must not be empty")
+        List<@Positive(message = "Category id must be positive") Long> categoryIds
 ) {
 }

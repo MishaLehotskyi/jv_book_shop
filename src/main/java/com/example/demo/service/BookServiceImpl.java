@@ -9,7 +9,6 @@ import com.example.demo.exception.EntityNotFoundException;
 import com.example.demo.mapper.BookMapper;
 import com.example.demo.model.Book;
 import com.example.demo.repository.BookRepository;
-import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.spec.SpecificationBuilder;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
-    private final CategoryRepository categoryRepository;
     private final BookMapper bookMapper;
     private final SpecificationBuilder<Book> bookSpecificationBuilder;
 
@@ -42,14 +40,12 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public BookDto save(CreateBookRequestDto bookDto) {
-        verifyCategoriesExist(bookDto.categoryIds());
         return bookMapper.toDto(bookRepository.save(bookMapper.toEntity(bookDto)));
     }
 
     @Override
     @Transactional
     public BookDto update(Long id, UpdateBookRequestDto bookDto) {
-        verifyCategoriesExist(bookDto.categoryIds());
         Book book = findBookById(id);
         bookMapper.updateBookFromDto(bookDto, book);
         return bookMapper.toDto(bookRepository.save(book));
@@ -80,18 +76,5 @@ public class BookServiceImpl implements BookService {
     private Book findBookById(Long id) {
         return bookRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Book not found with id: " + id));
-    }
-
-    private void verifyCategoriesExist(List<Long> categoryIds) {
-        if (categoryIds == null || categoryIds.isEmpty()) {
-            return;
-        }
-        List<Long> distinctIds = categoryIds.stream()
-                .distinct()
-                .toList();
-        if (categoryRepository.findAllById(distinctIds).size() != distinctIds.size()) {
-            throw new EntityNotFoundException(
-                    "Can't find all categories by ids: " + distinctIds);
-        }
     }
 }

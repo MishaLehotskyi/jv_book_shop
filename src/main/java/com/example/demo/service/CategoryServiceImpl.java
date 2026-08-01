@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.CategoryDto;
+import com.example.demo.dto.CreateCategoryDto;
 import com.example.demo.exception.EntityNotFoundException;
 import com.example.demo.mapper.CategoryMapper;
 import com.example.demo.model.Category;
@@ -32,14 +33,14 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public CategoryDto save(CategoryDto categoryDto) {
+    public CategoryDto save(CreateCategoryDto categoryDto) {
         Category category = categoryMapper.toEntity(categoryDto);
         return categoryMapper.toDto(categoryRepository.save(category));
     }
 
     @Override
     @Transactional
-    public CategoryDto update(Long id, CategoryDto categoryDto) {
+    public CategoryDto update(Long id, CreateCategoryDto categoryDto) {
         Category category = findCategoryById(id);
         categoryMapper.updateCategoryFromDto(categoryDto, category);
         return categoryMapper.toDto(categoryRepository.save(category));
