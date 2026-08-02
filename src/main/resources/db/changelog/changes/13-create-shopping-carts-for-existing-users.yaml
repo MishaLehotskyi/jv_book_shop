@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: 13-create-shopping-carts-for-existing-users
+      author: MishaLehotskyi
+      changes:
+        - sql:
+            comment: Create a shopping cart for every user that does not have one yet
+            sql: >
+              INSERT INTO shopping_carts (user_id, is_deleted)
+              SELECT u.id, FALSE
+              FROM users u
+              WHERE u.id NOT IN (SELECT user_id FROM shopping_carts)
