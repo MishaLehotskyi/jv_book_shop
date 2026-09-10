@@ -7,18 +7,11 @@ databaseChangeLog:
             tableName: shopping_carts
             columns:
               - column:
-                  name: id
-                  type: BIGINT
-                  autoIncrement: true
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-              - column:
                   name: user_id
                   type: BIGINT
                   constraints:
+                    primaryKey: true
                     nullable: false
-                    unique: true
                     foreignKeyName: fk_shopping_carts_user
                     references: users(id)
               - column:
