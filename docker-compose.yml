@@ -1,0 +1,38 @@
+services:
+  mysqldb:
+    image: mysql:8
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      MYSQL_DATABASE: ${MYSQLDB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQLDB_ROOT_PASSWORD}
+    ports:
+      - "${MYSQLDB_LOCAL_PORT}:${MYSQLDB_DOCKER_PORT}"
+    volumes:
+      - mysqldb-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p\"$$MYSQL_ROOT_PASSWORD\" --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  app:
+    build: .
+    image: book-shop-app
+    restart: on-failure
+    env_file: ./.env
+    depends_on:
+      mysqldb:
+        condition: service_healthy
+    ports:
+      - "${SPRING_LOCAL_PORT}:${SPRING_DOCKER_PORT}"
+      - "${DEBUG_PORT}:${DEBUG_PORT}"
+    environment:
+      MYSQLDB_HOST: mysqldb
+      MYSQLDB_PORT: ${MYSQLDB_DOCKER_PORT}
+      SERVER_PORT: ${SPRING_DOCKER_PORT}
+      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:${DEBUG_PORT}"
+
+volumes:
+  mysqldb-data:
